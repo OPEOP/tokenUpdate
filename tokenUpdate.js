@@ -23,7 +23,7 @@ function getNewToken(callback) {
             'X-OpenAM-Username': LOGIN,
             'X-OpenAM-Password': PASSWORD,
             'cache-control': 'no-cache',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         }
     };
 
@@ -67,11 +67,11 @@ function writeToken(token, success, failure) {
             return 1;
         }
 
-        const reg = /window\.RMM\.iPlanetDirectoryPro = ['].*['];$/;
+        const reg = /window\.RMM\.iPlanetDirectoryPro = ['].*['];$/m;
         const template = `window.RMM.iPlanetDirectoryPro = '${token}';`;
         const newData = data.replace(reg, template);
 
-        fs.writeFile('./index.html', newData, 'utf8', err => {
+        fs.writeFile(PATH_TO_FILE, newData, 'utf8', err => {
             if (err) {
                 failure(err);
                 return 1;
@@ -119,10 +119,10 @@ function showMessage(message) {
     console.log(yellow, `\n${message}`);
 }
 
-updateToken();
-
 function run() {
     let timerCount = 1;
+
+    updateToken();
 
     const timerId = setInterval(() => {
         updateToken();
