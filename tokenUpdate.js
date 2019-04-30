@@ -13,6 +13,17 @@ const interval = 1000 * 60 * 60 * HOURS_INTERVAL;
 const red = '\x1b[31m';
 const green = '\x1b[32m';
 const yellow = '\x1b[33m';
+let AUTO_UPDATE = false;
+
+const PARAMS = {
+    AUTO_UPDATE: '-a'
+};
+
+process.argv.forEach(function(val) {
+    if (val === PARAMS.AUTO_UPDATE) {
+        AUTO_UPDATE = true;
+    }
+});
 
 function getNewToken(callback) {
     const options = {
@@ -124,17 +135,19 @@ function run() {
 
     updateToken();
 
-    const timerId = setInterval(() => {
-        updateToken();
-        timerCount++;
+    if (AUTO_UPDATE) {
+        const timerId = setInterval(() => {
+            updateToken();
+            timerCount++;
 
-        console.log(timerCount);
+            console.log(timerCount);
 
-        if (timerCount === Math.round(12 / HOURS_INTERVAL)) {
-            showMessage('YOU NEED TO REST! GO HOME!');
-            clearInterval(timerId);
-        }
-    }, interval);
+            if (timerCount === Math.round(12 / HOURS_INTERVAL)) {
+                showMessage('YOU NEED TO REST! GO HOME!');
+                clearInterval(timerId);
+            }
+        }, interval);
+    }
 }
 
 run();

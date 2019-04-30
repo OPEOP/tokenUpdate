@@ -6,4 +6,5 @@
 4. Run "tokenUpdate.js" by command:
     node tokenUpdate.js
 
-Every 3 hours your token will be updated.
+Params:
+    -a - turn on auto update (Every 3 hours your token will be updated.)
