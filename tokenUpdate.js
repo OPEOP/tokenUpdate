@@ -1,7 +1,7 @@
 const fs = require('fs');
 const https = require('https');
 
-// Set your login, password and update interval
+// Set your login, password, host, path and path to index.html file
 const LOGIN = '';
 const PASSWORD = '';
 const HOST_NAME = ''; // site.domain.net
