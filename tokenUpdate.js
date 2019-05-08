@@ -103,10 +103,7 @@ function updateToken() {
             token,
             () => {
                 const date = new Date();
-                showSuccess('UPDATE WAS SUCCESSFUL:', date.toString());
-                showMessage(
-                    `Next update in ${HOURS_INTERVAL} ${HOURS_INTERVAL > 1 ? 'hours' : 'hour'}`
-                );
+                showSuccess('UPDATE WAS SUCCESSFUL:', date.toString());                
             },
             err => {
                 showError('Here we have some issues:', err);
@@ -139,8 +136,10 @@ function run() {
         const timerId = setInterval(() => {
             updateToken();
             timerCount++;
-
-            console.log(timerCount);
+            
+            showMessage(
+                 `Next update in ${HOURS_INTERVAL} ${HOURS_INTERVAL > 1 ? 'hours' : 'hour'}`
+            );           
 
             if (timerCount === Math.round(12 / HOURS_INTERVAL)) {
                 showMessage('YOU NEED TO REST! GO HOME!');
