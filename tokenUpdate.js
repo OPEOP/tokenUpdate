@@ -6,7 +6,7 @@ const LOGIN = '';
 const PASSWORD = '';
 const HOST_NAME = ''; // site.domain.net
 const PATH = ''; // /some/path?param=value&param2=value2
-const PATH_TO_FILE = ''; // ./PORTAL/index.html
+const PATH_TO_FILES = []; // ./PORTAL/index.html
 const HOURS_INTERVAL = 3; // (INT) The token will be updated every 3 hours
 
 const interval = 1000 * 60 * 60 * HOURS_INTERVAL;
@@ -71,18 +71,18 @@ function getNewToken(callback) {
     req.end();
 }
 
-function writeToken(token, success, failure) {
-    fs.readFile(PATH_TO_FILE, 'utf8', (err, data) => {
+function writeToken(path, token, success, failure) {
+    fs.readFile(path, 'utf8', (err, data) => {
         if (err) {
             failure(err);
             return 1;
         }
 
-        const reg = /window\.RMM\.iPlanetDirectoryPro = ['].*['];$/m;
-        const template = `window.RMM.iPlanetDirectoryPro = '${token}';`;
+        const reg = /iPlanetDirectoryPro = ['].*['];$/m;
+        const template = `iPlanetDirectoryPro = '${token}';`;
         const newData = data.replace(reg, template);
 
-        fs.writeFile(PATH_TO_FILE, newData, 'utf8', err => {
+        fs.writeFile(path, newData, 'utf8', err => {
             if (err) {
                 failure(err);
                 return 1;
@@ -99,16 +99,19 @@ function updateToken() {
             return 1;
         }
 
-        writeToken(
-            token,
-            () => {
-                const date = new Date();
-                showSuccess('UPDATE WAS SUCCESSFUL:', date.toString());
-            },
-            err => {
-                showError('Here we have some issues:', err);
-            }
-        );
+        PATH_TO_FILES.map(path => {
+            writeToken(
+                path,
+                token,
+                () => {
+                    const date = new Date();
+                    showSuccess(`UPDATE WAS SUCCESSFUL: ${path} - ${date.toString()}`);
+                },
+                err => {
+                    showError('Here we have some issues:', err);
+                }
+            );
+        });
     });
 }
 
